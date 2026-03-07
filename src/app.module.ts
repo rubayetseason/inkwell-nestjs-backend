@@ -4,6 +4,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { BlogsModule } from "./blogs/blog.module";
+import { AiModule } from "./ai/ai.module";
 import { SearchModule } from "./search/search.module";
 
 @Module({
@@ -21,6 +22,7 @@ import { SearchModule } from "./search/search.module";
     AuthModule,
     UsersModule,
     BlogsModule,
+    AiModule,
     SearchModule,
   ],
 })
