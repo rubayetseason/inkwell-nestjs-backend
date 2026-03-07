@@ -10,6 +10,7 @@ import {
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 
 @Controller("users")
 export class UsersController {
@@ -20,6 +21,7 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch("profile")
   async updateProfile(@Request() req, @Body() dto: UpdateUserDto) {
     return this.usersService.updateProfile(req.user.userId, dto);
@@ -35,12 +37,14 @@ export class UsersController {
     return this.usersService.getFollowing(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(":id/follow")
   async follow(@Request() req, @Param("id") targetId: string) {
     await this.usersService.follow(req.user.userId, targetId);
     return { message: "Followed successfully" };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(":id/unfollow")
   async unfollow(@Request() req, @Param("id") targetId: string) {
     await this.usersService.unfollow(req.user.userId, targetId);
