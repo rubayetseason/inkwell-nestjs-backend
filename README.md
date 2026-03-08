@@ -1,31 +1,6 @@
-```{=html}
 <p align="center">
-```
-`<a href="http://nestjs.com/" target="blank">`{=html}
-`<img src="https://nestjs.com/img/logo-small.svg" width="120" alt="NestJS Logo" />`{=html}
-`</a>`{=html}
-```{=html}
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
-```
-```{=html}
-<h1 align="center">
-```
-Inkwell Backend API
-```{=html}
-</h1>
-```
-```{=html}
-<p align="center">
-```
-AI-powered backend for the `<b>`{=html}Inkwell`</b>`{=html} blogging
-platform built with `<b>`{=html}NestJS`</b>`{=html},
-`<b>`{=html}MongoDB`</b>`{=html}, and
-`<b>`{=html}OpenRouter/OpenAI`</b>`{=html}.
-```{=html}
-</p>
-```
-
-------------------------------------------------------------------------
 
 # ✨ Overview
 
