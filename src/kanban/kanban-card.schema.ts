@@ -1,10 +1,13 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import {
+  KanbanColumn,
+  KanbanColumnArray,
+  KanbanPriority,
+  KanbanPriorityArray,
+} from "constants/enums";
 import { Document, Types } from "mongoose";
 
 export type KanbanCardDocument = KanbanCard & Document;
-
-export type KanbanColumn = "backlog" | "todo" | "doing" | "done";
-export type KanbanPriority = "low" | "medium" | "high" | "urgent";
 
 @Schema({ timestamps: true })
 export class KanbanCard {
@@ -16,14 +19,14 @@ export class KanbanCard {
 
   @Prop({
     type: String,
-    enum: ["backlog", "todo", "doing", "done"],
+    enum: KanbanColumnArray,
     default: "backlog",
   })
   status: KanbanColumn;
 
   @Prop({
     type: String,
-    enum: ["low", "medium", "high", "urgent"],
+    enum: KanbanPriorityArray,
     default: "medium",
   })
   priority: KanbanPriority;

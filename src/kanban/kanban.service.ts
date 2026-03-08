@@ -10,6 +10,7 @@ import { UpdateKanbanCardDto } from "./dto/update-kanban-card.dto";
 import { ConfigService } from "@nestjs/config";
 import OpenAI from "openai";
 import { KanbanCard, KanbanCardDocument } from "./kanban-card.schema";
+import { buildKanbanMovePrompt } from "constants/prompts";
 
 @Injectable()
 export class KanbanService {
@@ -120,39 +121,7 @@ export class KanbanService {
       priority: c.priority,
     }));
 
-    console.log("CARDS:", cardsSummary);
-    console.log("INSTRUCTION:", instruction);
-
-    const prompt = `
-You are an AI assistant managing a Kanban board.
-
-User instruction:
-"${instruction}"
-
-Here are the current cards:
-
-${JSON.stringify(cardsSummary, null, 2)}
-
-Valid statuses:
-backlog
-todo
-doing
-done
-
-Your task:
-Determine which cards should move to another status.
-
-Rules:
-- Match cards using title or priority
-- Only include cards that should move
-- If nothing matches return []
-
-Return ONLY JSON like this:
-
-[
-  { "cardId": "CARD_ID", "newStatus": "todo" }
-]
-`;
+    const prompt = buildKanbanMovePrompt(instruction, cardsSummary);
 
     const completion = await this.openai.chat.completions.create({
       model: "openai/gpt-4o-mini",

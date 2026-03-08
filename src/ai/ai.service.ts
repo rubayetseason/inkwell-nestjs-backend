@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { BlogPromptMode, buildBlogPrompt } from "constants/prompts";
 import OpenAI from "openai";
 
 @Injectable()
@@ -26,42 +27,9 @@ export class AiService {
   async analyzeBlog(
     content: string,
     title: string,
-    mode: "tldr" | "tell_more",
+    mode: BlogPromptMode,
   ): Promise<{ result: string; mode: string }> {
-    const plainText = content
-      .replace(/<[^>]*>/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-
-    const prompts = {
-      tldr: `
-You are a concise summarizer.
-
-Given the blog post titled "${title}", provide a TL;DR summary in 3-4 bullet points.
-
-Rules:
-- Each bullet must be a key takeaway
-- Keep it clear and punchy
-- Use "•" bullet formatting
-
-Blog content:
-${plainText.slice(0, 3000)}
-`,
-
-      tell_more: `
-You are an insightful writer who expands on blog topics.
-
-Given the blog post titled "${title}", provide 3-4 deeper insights or additional context.
-
-Rules:
-- Number the points
-- Add background or implications
-- Expand the author's ideas
-
-Blog content:
-${plainText.slice(0, 3000)}
-`,
-    };
+    const prompt = buildBlogPrompt(title, content, mode);
 
     const completion = await this.openai.chat.completions.create({
       model: "openai/gpt-4o-mini",
@@ -70,7 +38,7 @@ ${plainText.slice(0, 3000)}
       messages: [
         {
           role: "user",
-          content: prompts[mode],
+          content: prompt,
         },
       ],
     });
