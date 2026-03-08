@@ -11,6 +11,11 @@ import { ConfigService } from "@nestjs/config";
 import OpenAI from "openai";
 import { KanbanCard, KanbanCardDocument } from "./kanban-card.schema";
 import { buildKanbanMovePrompt } from "constants/prompts";
+import {
+  FRONTEND_URL,
+  OPENAI_MODEL,
+  OPENROUTER_API_BASE_URL,
+} from "constants/constants";
 
 @Injectable()
 export class KanbanService {
@@ -28,10 +33,10 @@ export class KanbanService {
     }
 
     this.openai = new OpenAI({
-      baseURL: "https://openrouter.ai/api/v1",
+      baseURL: OPENROUTER_API_BASE_URL,
       apiKey,
       defaultHeaders: {
-        "HTTP-Referer": "http://localhost:3000",
+        "HTTP-Referer": FRONTEND_URL,
         "X-Title": "Kanban AI",
       },
     });
@@ -124,7 +129,7 @@ export class KanbanService {
     const prompt = buildKanbanMovePrompt(instruction, cardsSummary);
 
     const completion = await this.openai.chat.completions.create({
-      model: "openai/gpt-4o-mini",
+      model: OPENAI_MODEL,
       temperature: 0.1,
       messages: [
         {

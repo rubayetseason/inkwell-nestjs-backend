@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { FRONTEND_URL, OPENAI_MODEL, OPENROUTER_API_BASE_URL } from "constants/constants";
 import { BlogPromptMode, buildBlogPrompt } from "constants/prompts";
 import OpenAI from "openai";
 
@@ -15,10 +16,10 @@ export class AiService {
     }
 
     this.openai = new OpenAI({
-      baseURL: "https://openrouter.ai/api/v1",
+      baseURL: OPENROUTER_API_BASE_URL,
       apiKey: apiKey,
       defaultHeaders: {
-        "HTTP-Referer": "http://localhost:3000", // your frontend
+        "HTTP-Referer": FRONTEND_URL,
         "X-Title": "Blog Platform",
       },
     });
@@ -32,7 +33,7 @@ export class AiService {
     const prompt = buildBlogPrompt(title, content, mode);
 
     const completion = await this.openai.chat.completions.create({
-      model: "openai/gpt-4o-mini",
+      model: OPENAI_MODEL,
       temperature: 0.7,
       max_tokens: 600,
       messages: [
